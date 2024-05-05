@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kp/views/manage_database.dart';
 import 'package:kp/views/view.dart';
 import 'package:provider/provider.dart';
 
@@ -92,7 +93,7 @@ class _BottomNavBarForDispatchersState extends State<BottomNavBarForDispatchers>
     ),
     ChangeNotifierProvider(
       create: (context) => DatabaseNotifier(),
-      child: ManageMinibuses(),
+      child: ManageDatabase(),
     ),
     ChangeNotifierProvider(
       create: (context) => DatabaseNotifier(),

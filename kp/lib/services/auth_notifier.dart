@@ -3,7 +3,7 @@ import 'package:kp/models/Client.dart';
 
 class AuthNotifier extends ChangeNotifier {
   bool _isAuthenticated = false;
-  late Client _currentUser;
+  late Client _currentUser = Client.empty();
 
   bool get isAuthenticated => _isAuthenticated;
   Client get currentUser => _currentUser;

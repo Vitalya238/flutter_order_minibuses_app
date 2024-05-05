@@ -191,40 +191,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     child: Text('Logout'),
                   ),
-                SizedBox(height: 20),
-                Text(
-                  'All Clients',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 SizedBox(height: 10),
                 Expanded(
-                  child: FutureBuilder<List<Client>>(
-                    future: _clientsFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        List<Client>? clients = snapshot.data;
-                        return ListView.builder(
-                          itemCount: clients!.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(
-                                  'ID: ${clients[index].userId}, Name: ${clients[index].username}, Phone: ${clients[index].telephone}, Email: ${clients[index].userEmail}'),
-                              subtitle: Text(
-                                  'Password: ${clients[index].userPassword}, LastName: ${clients[index].userLastname}, Role: ${clients[index].roleId}'),
-                            );
-                          },
-                        );
-                      }
-                    },
+                  child: Visibility(
+                    visible: authNotifier.currentUser.roleId == 1,
+                    child: FutureBuilder<List<Client>>(
+                      future: _clientsFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          List<Client>? clients = snapshot.data;
+                          return ListView.builder(
+                            itemCount: clients!.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(
+                                    'ID: ${clients[index].userId}, Name: ${clients[index].username}, Phone: ${clients[index].telephone}, Email: ${clients[index].userEmail}'),
+                                subtitle: Text(
+                                    'Password: ${clients[index].userPassword}, LastName: ${clients[index].userLastname}, Role: ${clients[index].roleId}'),
+                              );
+                            },
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ),
+
               ],
             ),
           ),
@@ -237,6 +233,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     ClientHandler clientHandler = ClientHandler(dbHelper.db);
 
+
+    bool usernameExists = await checkUsernameExists(_usernameController.text);
+    if (usernameExists) {
+      _showErrorDialog('Username already exists');
+      return;
+    }
+
+    bool phoneNumberExists = await checkPhoneNumberExists(_phoneNumberController.text);
+    if (phoneNumberExists) {
+      _showErrorDialog('Phone number already exists');
+      return;
+    }
+    bool emailExist = await checkEmailExists(_emailController.text);
+    if (emailExist) {
+      _showErrorDialog('Email already exists');
+      return;
+    }
     Client newClient = Client(
       _emailController.text,
       _passwordController.text,
@@ -259,4 +272,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _clientsFuture = _getAllClients();
     });
   }
+  Future<bool> checkPhoneNumberExists(String phoneNumber) async {
+    final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
+    ClientHandler clientHandler = ClientHandler(dbHelper.db);
+    final allClients = await clientHandler.getAllClients();
+    return allClients.any((client) => client.telephone == phoneNumber);
+  }
+  Future<bool> checkUsernameExists(String username) async {
+    final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
+    ClientHandler clientHandler = ClientHandler(dbHelper.db);
+    final allClients = await clientHandler.getAllClients();
+    return allClients.any((client) => client.username == username);
+  }
+  Future<bool> checkEmailExists(String userEmail) async {
+    final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
+    ClientHandler clientHandler = ClientHandler(dbHelper.db);
+    final allClients = await clientHandler.getAllClients();
+    return allClients.any((client) => client.userEmail == userEmail);
+  }
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
