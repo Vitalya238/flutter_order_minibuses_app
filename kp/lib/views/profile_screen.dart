@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   )
                 else
                   Text(
-                    'Login or registration',
+                    'Registration',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

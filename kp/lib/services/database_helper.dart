@@ -1,3 +1,4 @@
+import 'package:kp/services/bus_handler.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:kp/services/client_handler.dart';
@@ -17,6 +18,7 @@ class DatabaseHelper {
         onCreate: (db, version) async {
           await ClientHandler(db).createTable();
           await RoleHandler(db).createTable();
+          await BusHandler(db).createTable();
         });
   }
 
