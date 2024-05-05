@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:kp/services/client_handler.dart';
 import 'package:kp/services/role_handler.dart';
+import 'package:kp/services/city_handler.dart';
 
 class DatabaseHelper {
   late Database db;
@@ -19,6 +20,7 @@ class DatabaseHelper {
           await ClientHandler(db).createTable();
           await RoleHandler(db).createTable();
           await BusHandler(db).createTable();
+          await CityHandler(db).createTable();
         });
   }
 

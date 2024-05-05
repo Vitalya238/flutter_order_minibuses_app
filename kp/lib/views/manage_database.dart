@@ -33,7 +33,7 @@ class ManageDatabase extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => ManageBusStops()),
                 );
               },
-              child: const Text('Second Button'),
+              child: const Text('Manage Bus stops'),
             ),
           ],
         ),
