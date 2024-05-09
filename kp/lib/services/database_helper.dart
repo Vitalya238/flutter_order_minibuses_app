@@ -1,4 +1,5 @@
 import 'package:kp/services/bus_handler.dart';
+import 'package:kp/services/trip_handler.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:kp/services/client_handler.dart';
@@ -23,7 +24,7 @@ class DatabaseHelper {
           await BusHandler(db).createTable();
           await CityHandler(db).createTable();
           await RouteHandler(db).createTable();
-          // await TripHandler(db).createTable();
+          await TripHandler(db).createTable();
           // await TicketHandler(db).createTable();
         });
   }
