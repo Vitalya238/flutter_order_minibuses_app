@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:kp/services/client_handler.dart';
 import 'package:kp/services/role_handler.dart';
 import 'package:kp/services/city_handler.dart';
+import 'package:kp/services/route_hanlder.dart';
 
 class DatabaseHelper {
   late Database db;
@@ -21,6 +22,9 @@ class DatabaseHelper {
           await RoleHandler(db).createTable();
           await BusHandler(db).createTable();
           await CityHandler(db).createTable();
+          await RouteHandler(db).createTable();
+          // await TripHandler(db).createTable();
+          // await TicketHandler(db).createTable();
         });
   }
 

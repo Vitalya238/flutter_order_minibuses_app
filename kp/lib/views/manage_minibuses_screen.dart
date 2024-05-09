@@ -138,7 +138,7 @@ class _ManageMinibusesState extends State<ManageMinibuses> {
               itemCount: buses.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text('${buses[index].busBrand} - ${buses[index].busNumber}'),
+                  title: Text('id: ${buses[index].id}, Brand: ${buses[index].busBrand} - Number: ${buses[index].busNumber}'),
                   subtitle: Text('Number of places: ${buses[index].countPlaces}'),
                   onTap: () {
                     _editBus(context, buses[index]);

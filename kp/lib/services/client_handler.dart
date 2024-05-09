@@ -46,7 +46,18 @@ class ClientHandler {
       "REGISTERED",
     );
 
+
+    Client vodila = Client(
+      "driver@driver.com",
+      "driver",
+      "driver",
+      "driver",
+      "3333",
+      3,
+      "REGISTERED",
+    );
     await db.insert(tableName, defaultClient.toMap());
+    await db.insert(tableName, vodila.toMap());
   }
 
   Future<Client?> getClient(int id) async{

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kp/views/manage_cities.dart';
+import 'package:kp/views/manage_routes.dart';
 import 'package:kp/views/view.dart';
 
 class ManageDatabase extends StatelessWidget {
@@ -30,11 +32,22 @@ class ManageDatabase extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ManageBusStops()),
+                  MaterialPageRoute(builder: (context) => ManageCities()),
                 );
               },
-              child: const Text('Manage Bus stops'),
+              child: const Text('Manage Cities'),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ManageRoutes()),
+                );
+              },
+              child: const Text('Manage Routes'),
+            ),
+
           ],
         ),
       ),

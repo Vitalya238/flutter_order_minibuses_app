@@ -1,17 +1,18 @@
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:kp/models/City.dart';
 import 'package:kp/services/database_notifier.dart';
 import 'package:kp/services/city_handler.dart';
 import 'package:provider/provider.dart';
 
-class ManageBusStops extends StatefulWidget {
+class ManageCities extends StatefulWidget {
   @override
-  _ManageBusStopsState createState() => _ManageBusStopsState();
+  _ManageCitiesState createState() => _ManageCitiesState();
 }
 
-class _ManageBusStopsState extends State<ManageBusStops> {
-  late Future<List<City>> _cityFuture;
+class _ManageCitiesState extends State<ManageCities> {
+  late Future<List<City>> _citiesFuture;
   final TextEditingController _cityNameController = TextEditingController();
 
   late City _selectedCity;
@@ -19,7 +20,7 @@ class _ManageBusStopsState extends State<ManageBusStops> {
   @override
   void initState() {
     super.initState();
-    _cityFuture = _getAllCities();
+    _citiesFuture = _getAllCities();
   }
 
   Future<List<City>> _getAllCities() async {
@@ -36,7 +37,7 @@ class _ManageBusStopsState extends State<ManageBusStops> {
       appBar: AppBar(
         backgroundColor: Colors.amberAccent,
         title: const Text(
-          'Bus Stops',
+          'Cities',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
@@ -45,21 +46,21 @@ class _ManageBusStopsState extends State<ManageBusStops> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAddBusStopForm(),
+            _buildAddCityForm(),
             SizedBox(height: 20),
-            _buildBusStopsList(),
+            _buildCitiesList(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAddBusStopForm() {
+  Widget _buildAddCityForm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Add Bus Stop',
+          'Add City',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 10),
@@ -73,7 +74,7 @@ class _ManageBusStopsState extends State<ManageBusStops> {
         SizedBox(height: 10),
         ElevatedButton(
           onPressed: _addCity,
-          child: Text('Add Bus Stop'),
+          child: Text('Add City'),
         ),
       ],
     );
@@ -89,16 +90,16 @@ class _ManageBusStopsState extends State<ManageBusStops> {
       City newCity = City(cityName);
       await cityHandler.insert(newCity);
       setState(() {
-        _cityFuture = _getAllCities();
+        _citiesFuture = _getAllCities();
         _cityNameController.clear();
       });
     }
   }
 
-  Widget _buildBusStopsList() {
+  Widget _buildCitiesList() {
     return Expanded(
       child: FutureBuilder(
-        future: _cityFuture,
+        future: _citiesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -114,7 +115,7 @@ class _ManageBusStopsState extends State<ManageBusStops> {
               itemCount: cities.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text('${cities[index].cityName}'),
+                  title: Text('id: ${cities[index].cityId}, name: ${cities[index].cityName}'),
                   onTap: () {
                     _editCity(context, cities[index]);
                   },
@@ -142,7 +143,7 @@ class _ManageBusStopsState extends State<ManageBusStops> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Bus Stop'),
+          title: Text('Edit City'),
           content: _buildEditCityForm(),
           actions: <Widget>[
             TextButton(
@@ -176,7 +177,6 @@ class _ManageBusStopsState extends State<ManageBusStops> {
             border: OutlineInputBorder(),
           ),
         ),
-        SizedBox(height: 10),
       ],
     );
   }
@@ -192,9 +192,8 @@ class _ManageBusStopsState extends State<ManageBusStops> {
       updatedCity.cityId = _selectedCity.cityId;
       await cityHandler.update(updatedCity);
       setState(() {
-        _cityFuture = _getAllCities();
+        _citiesFuture = _getAllCities();
         _cityNameController.clear();
-        _selectedCity = updatedCity;
       });
     }
   }
@@ -205,7 +204,7 @@ class _ManageBusStopsState extends State<ManageBusStops> {
 
     await cityHandler.delete(city.cityId);
     setState(() {
-      _cityFuture = _getAllCities();
+      _citiesFuture = _getAllCities();
     });
   }
 }
