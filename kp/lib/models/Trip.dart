@@ -1,5 +1,4 @@
 class Trip {
-  final String tableName = 'TRIP';
   final String columnTripId = 'TRIPID';
   final String columnDepartureDate = 'DEPARTURE_DATE';
   final String columnDestinationDate = 'DESTINATION_DATE';
@@ -22,17 +21,19 @@ class Trip {
   late int busId;
   late int driverId;
 
+
   Trip(
-      this.departureDate,
-      this.destinationDate,
-      this.departureTime,
-      this.destinationTime,
-      this.countFreePlaces,
-      this.cost,
-      this.routeId,
-      this.busId,
-      this.driverId,
-      );
+     this.departureDate,
+     this.destinationDate,
+     this.departureTime,
+     this.destinationTime,
+     this.countFreePlaces,
+     this.cost,
+     this.routeId,
+     this.busId,
+     this.driverId,
+  );
+
 
   Map<String, Object?> toMap() {
     var map = <String, Object?>{
@@ -46,14 +47,11 @@ class Trip {
       columnBusId: busId,
       columnDriverId: driverId,
     };
-    if (tripId != 0) {
-      map[columnTripId] = tripId;
-    }
     return map;
   }
 
   Trip.fromMap(Map<dynamic, dynamic> map) {
-    tripId = map[columnTripId] ?? 0;
+    tripId = map[columnTripId];
     departureDate = map[columnDepartureDate];
     destinationDate = map[columnDestinationDate];
     departureTime = map[columnDepartureTime];

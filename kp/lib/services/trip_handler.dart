@@ -1,4 +1,3 @@
-
 import 'package:sqflite/sqflite.dart';
 import 'package:kp/models/Trip.dart';
 
@@ -14,12 +13,10 @@ const String columnRouteId = 'ROUTEID';
 const String columnBusId = 'BUSID';
 const String columnDriverId = 'DRIVERID';
 
-
-
-class TripHandler{
+class TripHandler {
   late Database db;
   TripHandler(this.db);
-  Future createTable() async{
+  Future createTable() async {
     await db.execute('''
         create table IF NOT EXISTS $tableName ($columnTripId INTEGER PRIMARY KEY autoincrement,
                                 $columnDepartureDate TEXT not null,
@@ -56,16 +53,16 @@ class TripHandler{
   Future<int> update(Trip trip) async{
     return await db.update(tableName, trip.toMap(), where: '$columnTripId = ?', whereArgs: [trip.tripId]);
   }
+
+
   Future<List<Trip>> getAllTrips() async{
     List<Map<String, dynamic>> maps = await db.query(tableName);
-    List<Trip> trips = [];
+    List<Trip> routes = [];
     for(var map in maps){
-      trips.add(Trip.fromMap(map));
+      routes.add(Trip.fromMap(map));
     }
-    return trips;
+    return routes;
   }
-
-
 
   Future close() async => db.close();
 }
