@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:kp/services/client_handler.dart';
 import 'package:kp/services/role_handler.dart';
 import 'package:kp/services/city_handler.dart';
-import 'package:kp/services/route_hanlder.dart';
+import 'package:kp/services/route_handler.dart';
 
 class DatabaseHelper {
   late Database db;

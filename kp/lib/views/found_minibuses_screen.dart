@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kp/models/Trip.dart';
-import 'package:kp/services/database_helper.dart';
 import 'package:kp/services/trip_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +40,6 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,9 +63,8 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Откуда: ${map['DepartureCityName']}'),
-                      Text('Куда: ${map['DestinationCityName']}'),
-                      Text('Количество пассажиров: ${widget.passengers}'),
+                      Text('Откуда: '),
+                      Text('Куда:'),
                       Text('Время отправления: ${trips[index].departureTime}'),
                       Text('Время прибытия: ${trips[index].destinationTime}'),
                       Text('Свободные места: ${trips[index].countFreePlaces}'),
