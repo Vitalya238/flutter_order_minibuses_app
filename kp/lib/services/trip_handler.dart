@@ -1,5 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:kp/models/Trip.dart';
+import 'package:kp/models/Route.dart';
+import 'package:kp/models/City.dart';
 
 const String tableName = 'TRIP';
 const String columnTripId = 'TRIPID';
@@ -32,11 +34,12 @@ class TripHandler {
                                 FOREIGN KEY ($columnRouteId) REFERENCES ROUTE(ROUTEID),
                                 FOREIGN KEY ($columnDriverId) REFERENCES CLIENT(USERID))
       ''');
-
   }
+
   Future<int> insert(Trip trip) async{
     return await db.insert(tableName, trip.toMap());
   }
+
   Future<Trip?> getTrip(int id) async{
     List<Map> maps = await db.query(tableName,
         columns: [columnTripId, columnDepartureDate, columnDestinationDate, columnDepartureTime, columnDestinationTime, columnCountFreePlaces,columnCost,columnRouteId,columnBusId,columnDriverId],
@@ -47,13 +50,28 @@ class TripHandler {
     }
     return null;
   }
+
   Future<int> delete(int id) async{
     return await db.delete(tableName, where: '$columnTripId = ?', whereArgs: [id]);
   }
+
   Future<int> update(Trip trip) async{
     return await db.update(tableName, trip.toMap(), where: '$columnTripId = ?', whereArgs: [trip.tripId]);
   }
 
+  Future<List<Map<String, dynamic>>> getAllTripsWithCities() async{
+    String sqlQuery = '''
+    SELECT $tableName.$columnTripId, $tableName.$columnDepartureDate, $tableName.$columnDestinationDate, $tableName.$columnDepartureTime, $tableName.$columnDestinationTime, $tableName.$columnCost, $tableName.$columnCountFreePlaces, CITY_DEPARTURE.CITYNAME as DepartureCityName,
+      CITY_DESTINATION.CITYNAME as DestinationCityName
+    FROM $tableName
+    INNER JOIN ROUTE ON ROUTE.$columnRouteId = $tableName.$columnRouteId
+    INNER JOIN CITY as CITY_DEPARTURE ON ROUTE.POINT_OF_DEPARTUREID = CITY_DEPARTURE.CITYID
+    INNER JOIN CITY as CITY_DESTINATION ON ROUTE.POINT_OF_DESTINATIONID = CITY_DESTINATION.CITYID
+  ''';
+
+    List<Map<String, dynamic>> results = await db.rawQuery(sqlQuery);
+    return results;
+  }
 
   Future<List<Trip>> getAllTrips() async{
     List<Map<String, dynamic>> maps = await db.query(tableName);

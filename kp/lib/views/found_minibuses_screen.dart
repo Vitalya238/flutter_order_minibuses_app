@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kp/models/Trip.dart';
 import 'package:kp/services/trip_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +23,7 @@ class FoundMinibusesScreen extends StatefulWidget {
 }
 
 class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
-  late Future<List<Trip>> _tripsFuture;
+  late Future<List<Map<String, dynamic>>> _tripsFuture;
 
   @override
   void initState() {
@@ -32,12 +31,16 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
     _tripsFuture = _getAllTrips();
   }
 
-  Future<List<Trip>> _getAllTrips() async {
+  Future<List<Map<String, dynamic>>> _getAllTrips() async {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     await dbHelper.init();
     TripHandler tripHandler = TripHandler(dbHelper.db);
-    return tripHandler.getAllTrips();
+    print(await tripHandler.getAllTripsWithCities());
+    return tripHandler.getAllTripsWithCities();
   }
+
+  @override
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
       appBar: AppBar(
         title: Text('Найденные рейсы'),
       ),
-      body: FutureBuilder<List<Trip>>(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _tripsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,22 +56,21 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Ошибка: ${snapshot.error}'));
           } else {
-            List<Trip> trips = snapshot.data!;
             return ListView.builder(
-              itemCount: trips.length,
+              itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                Map<String, dynamic> map = snapshot.data![index].toMap();
+                final data = snapshot.data![index];
                 return ListTile(
-                  title: Text('Рейс №${trips[index].tripId}'),
+                  title: Text('Рейс №${data['TRIPID']}'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Откуда: '),
-                      Text('Куда:'),
-                      Text('Время отправления: ${trips[index].departureTime}'),
-                      Text('Время прибытия: ${trips[index].destinationTime}'),
-                      Text('Свободные места: ${trips[index].countFreePlaces}'),
-                      Text('Стоимость: ${trips[index].cost}'),
+                      Text('Откуда: ${data['DepartureCityName']}'),
+                      Text('Куда: ${data['DestinationCityName']}'),
+                      Text('Время отправления: ${data['DEPARTURE_TIME']}'),
+                      Text('Время прибытия: ${data['DESTINATION_TIME']}'),
+                      Text('Свободные места: ${data['COUNT_FREE_PLACES']}'),
+                      Text('Стоимость: ${data['COST']}'),
                     ],
                   ),
                 );
@@ -79,8 +81,6 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
       ),
     );
   }
-
-
 
 
 }

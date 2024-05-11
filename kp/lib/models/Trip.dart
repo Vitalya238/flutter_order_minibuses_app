@@ -21,31 +21,29 @@ class Trip {
   late int busId;
   late int driverId;
 
-
   Trip(
-     this.departureDate,
-     this.destinationDate,
-     this.departureTime,
-     this.destinationTime,
-     this.countFreePlaces,
-     this.cost,
-     this.routeId,
-     this.busId,
-     this.driverId,
-  );
-
+      this.departureDate,
+      this.destinationDate,
+      this.departureTime,
+      this.destinationTime,
+      this.countFreePlaces,
+      this.cost,
+      this.routeId,
+      this.busId,
+      this.driverId,
+      );
 
   Map<String, Object?> toMap() {
     var map = <String, Object?>{
-      columnDepartureDate: departureDate,
-      columnDestinationDate: destinationDate,
-      columnDepartureTime: departureTime,
-      columnDestinationTime: destinationTime,
-      columnCountFreePlaces: countFreePlaces,
-      columnCost: cost,
-      columnRouteId: routeId,
-      columnBusId: busId,
-      columnDriverId: driverId,
+      columnDepartureDate : departureDate,
+      columnDestinationDate : destinationDate,
+      columnDepartureTime : departureTime,
+      columnDestinationTime : destinationTime,
+      columnCountFreePlaces : countFreePlaces,
+      columnCost : cost,
+      columnRouteId : routeId,
+      columnBusId : busId,
+      columnDriverId : driverId,
     };
     return map;
   }
