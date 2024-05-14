@@ -30,9 +30,6 @@ class RoleHandler{
     Role driverRole = Role(
         "driver"
     );
-    print(defaultRole);
-    print(clientRole);
-    print(driverRole);
     await db.insert(tableName, defaultRole.toMap());
     await db.insert(tableName, clientRole.toMap());
     await db.insert(tableName, driverRole.toMap());

@@ -59,7 +59,12 @@ class TripHandler {
     return await db.update(tableName, trip.toMap(), where: '$columnTripId = ?', whereArgs: [trip.tripId]);
   }
 
-  Future<List<Map<String, dynamic>>> getAllTripsWithCities() async{
+  Future<List<Map<String, dynamic>>> getAllTripsWithCities(
+      String date,
+      int passengers,
+      String departureCityName,
+      String destinationCityName
+      ) async {
     String sqlQuery = '''
     SELECT $tableName.$columnTripId, $tableName.$columnDepartureDate, $tableName.$columnDestinationDate, $tableName.$columnDepartureTime, $tableName.$columnDestinationTime, $tableName.$columnCost, $tableName.$columnCountFreePlaces, CITY_DEPARTURE.CITYNAME as DepartureCityName,
       CITY_DESTINATION.CITYNAME as DestinationCityName
@@ -67,11 +72,16 @@ class TripHandler {
     INNER JOIN ROUTE ON ROUTE.$columnRouteId = $tableName.$columnRouteId
     INNER JOIN CITY as CITY_DEPARTURE ON ROUTE.POINT_OF_DEPARTUREID = CITY_DEPARTURE.CITYID
     INNER JOIN CITY as CITY_DESTINATION ON ROUTE.POINT_OF_DESTINATIONID = CITY_DESTINATION.CITYID
+    WHERE $tableName.$columnDepartureDate = ?
+      AND $tableName.$columnCountFreePlaces >= ?
+      AND CITY_DEPARTURE.CITYNAME = ?
+      AND CITY_DESTINATION.CITYNAME = ?
   ''';
 
-    List<Map<String, dynamic>> results = await db.rawQuery(sqlQuery);
+    List<Map<String, dynamic>> results = await db.rawQuery(sqlQuery, [date, passengers, departureCityName, destinationCityName]);
     return results;
   }
+
 
   Future<List<Trip>> getAllTrips() async{
     List<Map<String, dynamic>> maps = await db.query(tableName);

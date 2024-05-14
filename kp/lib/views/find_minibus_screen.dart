@@ -111,7 +111,6 @@ class _FindMinibusScreenState extends State<FindMinibusScreen> {
       ),
     );
   }
-
   Future<void> _selectDate() async {
     DateTime? _picked = await showDatePicker(
       context: context,

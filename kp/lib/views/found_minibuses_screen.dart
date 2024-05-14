@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kp/services/trip_handler.dart';
 import 'package:provider/provider.dart';
-
 import '../services/database_notifier.dart';
 
 class FoundMinibusesScreen extends StatefulWidget {
@@ -35,12 +34,9 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     await dbHelper.init();
     TripHandler tripHandler = TripHandler(dbHelper.db);
-    print(await tripHandler.getAllTripsWithCities());
-    return tripHandler.getAllTripsWithCities();
+
+    return tripHandler.getAllTripsWithCities(widget.date, int.parse(widget.passengers), widget.from, widget.to);
   }
-
-  @override
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +77,4 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
       ),
     );
   }
-
-
 }
