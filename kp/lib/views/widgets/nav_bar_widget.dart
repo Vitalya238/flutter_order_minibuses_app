@@ -140,3 +140,93 @@ class _BottomNavBarForDispatchersState extends State<BottomNavBarForDispatchers>
   }
 }
 
+
+
+class BottomNavBarForGuests extends StatefulWidget {
+  const BottomNavBarForGuests({super.key});
+
+  @override
+  _BottomNavBarForGuestsState createState() => _BottomNavBarForGuestsState();
+}
+
+class _BottomNavBarForGuestsState extends State<BottomNavBarForGuests> {
+  int _currentIndex = 0;
+  final List<Widget> _pages = [
+    ChangeNotifierProvider(
+      create: (context) => DatabaseNotifier(),
+      child: const FindMinibusScreen(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => DatabaseNotifier(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.amberAccent,
+          title: const Text(
+            'Help',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        body: const Center(
+          child: Text('Authorized users only'),
+        ),
+      ),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => DatabaseNotifier(),
+      child:  Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.amberAccent,
+          title: const Text(
+            'Trips',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        body: const Center(
+          child: Text('Authorized users only'),
+        ),
+      ),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => DatabaseNotifier(),
+      child: ProfileScreen(),
+    ),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(''),
+        backgroundColor: Colors.amberAccent,
+      ),
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Find',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.help),
+            label: 'Help',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bus_alert_rounded),
+            label: 'Trips',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+

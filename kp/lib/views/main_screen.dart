@@ -25,7 +25,9 @@ class _MainScreenState extends State<MainScreen> {
             ),
             bottomNavigationBar: authNotifier.currentUser.roleId == 1
                 ? BottomNavBarForDispatchers()
-                : BottomNavBarForClients(),
+                : authNotifier.currentUser.roleId == 2
+                ? BottomNavBarForClients()
+                : BottomNavBarForGuests(),
           );
         });
   }

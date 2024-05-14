@@ -42,6 +42,7 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.amberAccent,
         title: Text('Найденные рейсы'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -61,12 +62,40 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Откуда: ${data['DepartureCityName']}'),
-                      Text('Куда: ${data['DestinationCityName']}'),
-                      Text('Время отправления: ${data['DEPARTURE_TIME']}'),
-                      Text('Время прибытия: ${data['DESTINATION_TIME']}'),
-                      Text('Свободные места: ${data['COUNT_FREE_PLACES']}'),
-                      Text('Стоимость: ${data['COST']}'),
+                      Row(
+                        children: [
+                          Text('${data['DEPARTURE_TIME']}'),
+                          Text('${data['DESTINATION_TIME']}'),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+                      ),
+                      Row(
+                        children: [
+                          Text('${data['DEPARTURE_DATE']}'),
+                          Text('${data['DESTINATION_DATE']}'),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+                      ),
+                      Row(
+                        children: [
+                          Text('${data['DepartureCityName']}'),
+                          Text('${data['DestinationCityName']}'),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+                      ),
+                      Row(
+                        children: [
+                          Text('Свободные места: ${data['COUNT_FREE_PLACES']}'),
+                          Text('Стоимость: ${data['COST']}'),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+                      ),
+                      ElevatedButton(
+                        onPressed: _orderTicket,
+                        child: Center(
+                           child : Text('Buy'),
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -76,5 +105,9 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
         },
       ),
     );
+  }
+
+  void _orderTicket() {
+    
   }
 }
