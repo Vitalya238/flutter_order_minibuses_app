@@ -69,36 +69,36 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                            Row(
-                              children: [
-                                Text('${data['DEPARTURE_TIME']}'),
-                                Text('${data['DESTINATION_TIME']}'),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-                            ),
-                            Row(
-                              children: [
-                                Text('${data['DEPARTURE_DATE']}'),
-                                Text('${data['DESTINATION_DATE']}'),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-                            ),
-                            Row(
-                              children: [
-                                Text('${data['DepartureCityName']}'),
-                                Text('${data['DestinationCityName']}'),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-                            ),
-                            Row(
-                              children: [
-                                Text('Свободные места: ${data['COUNT_FREE_PLACES']}'),
-                                Text('Стоимость: ${data['COST']} USD'),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-                            ),
+                          Row(
+                            children: [
+                              Text('${data['DEPARTURE_TIME']}'),
+                              Text('${data['DESTINATION_TIME']}'),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          Row(
+                            children: [
+                              Text('${data['DEPARTURE_DATE']}'),
+                              Text('${data['DESTINATION_DATE']}'),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          Row(
+                            children: [
+                              Text('${data['DepartureCityName']}'),
+                              Text('${data['DestinationCityName']}'),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          Row(
+                            children: [
+                              Text('Свободные места: ${data['COUNT_FREE_PLACES']}'),
+                              Text('Стоимость: ${data['COST']} USD'),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
                           ElevatedButton(
-                            onPressed: () => _orderTicket(data['TRIPID'], authNotifier.currentUser),
+                            onPressed: () => _confirmOrder(context, data['TRIPID'], authNotifier.currentUser),
                             child: Center(
                               child: Text('Buy'),
                             ),
@@ -116,6 +116,31 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
     );
   }
 
+  void _confirmOrder(BuildContext context, int tripId, Client currentUser) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm Order'),
+        content: Text('Do you want to buy this ticket?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _orderTicket(tripId, currentUser);
+            },
+            child: Text('Confirm'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _orderTicket(int selectedTripId, Client currentUser) async {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     await dbHelper.init();
@@ -127,19 +152,21 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
     );
     await orderHandler.insert(order);
 
-    _updateTrip(selectedTripId);
+    await _updateTrip(selectedTripId); // Обновляем информацию о рейсе
+
     setState(() {
+      // После того, как обновили информацию о рейсе, обновляем список рейсов
       _tripsFuture = _getAllTrips();
     });
   }
 
-  void _updateTrip(int tripId) async {
+  Future<void> _updateTrip(int tripId) async {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     await dbHelper.init();
     TripHandler tripHandler = TripHandler(dbHelper.db);
     Trip? trip = await tripHandler.getTrip(tripId);
     if (trip != null) {
-      if(trip.countFreePlaces < int.parse(widget.passengers)) {
+      if (trip.countFreePlaces < int.parse(widget.passengers)) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -155,16 +182,12 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
             ],
           ),
         );
-      }
-      else {
+      } else {
         int selectedPassengers = int.parse(widget.passengers);
         trip.countFreePlaces -= selectedPassengers;
         await tripHandler.update(trip);
-
       }
     }
   }
 
 }
-
-
