@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kp/models/Order.dart';
 import 'package:kp/models/Trip.dart';
 import 'package:kp/services/database_notifier.dart';
 import 'package:kp/services/order_handler.dart';
@@ -37,7 +36,8 @@ class _ListOfTripsScreenState extends State<ListOfTripsScreen> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.amberAccent,
-            title: const Text('История заказов'),
+            title: const Text('История заказов',
+            style: TextStyle(fontWeight: FontWeight.w600),),
           ),
           body: FutureBuilder<List<Map<String, dynamic>>>(
             future: _ordersFuture,

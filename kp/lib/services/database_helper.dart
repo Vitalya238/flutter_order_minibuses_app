@@ -1,3 +1,5 @@
+import 'package:kp/models/Application.dart';
+import 'package:kp/services/application_handler.dart';
 import 'package:kp/services/bus_handler.dart';
 import 'package:kp/services/faq_handler.dart';
 import 'package:kp/services/order_handler.dart';
@@ -29,6 +31,7 @@ class DatabaseHelper {
           await TripHandler(db).createTable();
           await FAQHandler(db).createTable();
           await OrderHandler(db).createTable();
+          await DriverApplicationHandler(db).createTable();
         });
   }
 

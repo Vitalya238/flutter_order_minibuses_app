@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kp/services/auth_notifier.dart';
 import 'package:kp/services/database_notifier.dart';
+import 'package:kp/views/become_a_driver_form.dart';
 import 'package:provider/provider.dart';
 import 'package:kp/models/Client.dart';
 import 'package:kp/services/client_handler.dart';
@@ -183,6 +184,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: const Text('Already have an account?'),
                         ),
                     ],
+                  ),
+                if (authNotifier.currentUser.roleId == 2)
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => BecomeADriverForm()),
+                      );
+                    },
+                    child: Text('Стать водителем'),
                   ),
                 if (authNotifier.isAuthenticated)
                   ElevatedButton(

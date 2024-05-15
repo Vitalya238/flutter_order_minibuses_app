@@ -38,6 +38,7 @@ dependencies:
   path:
   provider:
   url_launcher: ^6.2.6
+  image_picker:
 
 dev_dependencies:
   flutter_test:

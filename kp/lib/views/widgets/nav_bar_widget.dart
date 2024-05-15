@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kp/views/driver_application_list.dart';
 import 'package:kp/views/help_screen_dispatcher.dart';
 import 'package:kp/views/manage_database.dart';
 import 'package:kp/views/view.dart';
 import 'package:provider/provider.dart';
-
 import '../../services/database_notifier.dart';
-import '../manage_minibuses_screen.dart';
 class BottomNavBarForClients extends StatefulWidget {
   const BottomNavBarForClients({super.key});
 
@@ -86,7 +85,7 @@ class _BottomNavBarForDispatchersState extends State<BottomNavBarForDispatchers>
   final List<Widget> _pages = [
     ChangeNotifierProvider(
       create: (context) => DatabaseNotifier(),
-      child: const FindMinibusScreen(),
+      child: DriverApplicationList(),
     ),
     ChangeNotifierProvider(
       create: (context) => DatabaseNotifier(),

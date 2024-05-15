@@ -98,7 +98,11 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           ),
                           ElevatedButton(
-                            onPressed: () => _confirmOrder(context, data['TRIPID'], authNotifier.currentUser),
+                            onPressed: () {
+                              if (authNotifier.currentUser.roleId == 2) {
+                                _confirmOrder(context, data['TRIPID'], authNotifier.currentUser);
+                              }
+                            },
                             child: Center(
                               child: Text('Buy'),
                             ),
