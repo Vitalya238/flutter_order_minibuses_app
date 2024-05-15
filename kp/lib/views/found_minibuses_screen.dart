@@ -123,6 +123,7 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
     Order order = Order(
       selectedTripId,
       currentUser.userId,
+      int.parse(widget.passengers),
     );
     await orderHandler.insert(order);
 

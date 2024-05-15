@@ -3,10 +3,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:kp/models/Trip.dart';
 import 'package:kp/models/Client.dart';
 
-const String tableName = 'ORDERS'; // Изменено на ORDERS
+const String tableName = 'ORDERS';
 const String columnOrderID = 'ORDERID';
 const String columnTripID = 'TRIPID';
 const String columnClientID = 'CLIENTID';
+const String columnPassengersQuantity = 'PASSENGERSQUANTITY';
 
 class OrderHandler {
   late Database db;
@@ -16,6 +17,7 @@ class OrderHandler {
         create table IF NOT EXISTS `$tableName` (`$columnOrderID` INTEGER PRIMARY KEY autoincrement,
                                 `$columnTripID` INTEGER not null,
                                 `$columnClientID` INTEGER not null,
+                                `$columnPassengersQuantity` INTEGER not null,
                                 FOREIGN KEY (`$columnTripID`) REFERENCES BUS(TRIPID),
                                 FOREIGN KEY (`$columnClientID`) REFERENCES ROUTE(USERID))
       ''');
@@ -57,7 +59,7 @@ class OrderHandler {
       int userId
       ) async {
     String sqlQuery = '''
-    SELECT $tableName.$columnOrderID, $tableName.$columnTripID, $tableName.$columnClientID, 
+    SELECT $tableName.$columnOrderID, $tableName.$columnTripID, $tableName.$columnClientID, $tableName.$columnPassengersQuantity as PassengersQuantity, 
       TRIP.TRIPID, TRIP.DEPARTURE_DATE as TripDepartureDate, TRIP.DESTINATION_DATE as TripDestinationDate, TRIP.DEPARTURE_TIME as TripDepartureTime, TRIP.DESTINATION_TIME as TripDestinationTime, TRIP.COST as TripCost, 
       CITY_DEPARTURE.CITYNAME as DepartureCityName,
       CITY_DESTINATION.CITYNAME as DestinationCityName,

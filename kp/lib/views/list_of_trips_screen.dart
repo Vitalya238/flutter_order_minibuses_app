@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kp/models/Order.dart';
+import 'package:kp/models/Trip.dart';
 import 'package:kp/services/database_notifier.dart';
 import 'package:kp/services/order_handler.dart';
+import 'package:kp/services/trip_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:kp/services/auth_notifier.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -93,9 +96,14 @@ class _ListOfTripsScreenState extends State<ListOfTripsScreen> {
                           Row(
                             children: [
                               Text('Brand: ${data['BusBrand']}'),
-                              Text('Number: ${data['BusNumber']}'),
+                              Text('BUSNumber: ${data['BusNumber']}'),
+                              Text('PassengersQuantity: ${data['PassengersQuantity']}'),
                             ],
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _cancelTrip(context, data['TRIPID'],data['ORDERID'], data['PassengersQuantity']),
+                            child: Text('Отказаться'),
                           ),
                         ],
                       ),
@@ -113,6 +121,31 @@ class _ListOfTripsScreenState extends State<ListOfTripsScreen> {
     Uri _url = Uri.parse('tel:${phoneNum}');
     if (!await launchUrl(_url)) {
       throw Exception('Could not launch $_url');
+    }
+  }
+  Future<void> _cancelTrip(BuildContext context, int tripId, int orderId, passQuant) async {
+    final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
+    OrderHandler orderHandler = OrderHandler(dbHelper.db);
+
+    _updateTrip(tripId, passQuant);
+    await orderHandler.delete(orderId);
+    setState(() {
+      _ordersFuture = _getAllOrders(currentUserId);
+    });
+  }
+
+
+  void _updateTrip(int tripId, int passQuant) async {
+    final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
+    await dbHelper.init();
+    TripHandler tripHandler = TripHandler(dbHelper.db);
+    Trip? trip = await tripHandler.getTrip(tripId);
+    if (trip != null) {
+
+        int selectedPassengers = passQuant;
+        trip.countFreePlaces += selectedPassengers;
+        await tripHandler.update(trip);
+
     }
   }
 }
