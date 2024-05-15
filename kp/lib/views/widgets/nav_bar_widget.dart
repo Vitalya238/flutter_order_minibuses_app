@@ -158,18 +158,7 @@ class _BottomNavBarForGuestsState extends State<BottomNavBarForGuests> {
     ),
     ChangeNotifierProvider(
       create: (context) => DatabaseNotifier(),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.amberAccent,
-          title: const Text(
-            'Help',
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ),
-        body: const Center(
-          child: Text('Authorized users only'),
-        ),
-      ),
+      child: HelpScreen(),
     ),
     ChangeNotifierProvider(
       create: (context) => DatabaseNotifier(),

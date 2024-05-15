@@ -3,6 +3,7 @@ import 'package:kp/models/FAQ.dart';
 import 'package:kp/services/faq_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:kp/services/database_notifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelpScreen extends StatefulWidget {
   @override
@@ -36,6 +37,12 @@ class _HelpScreenState extends State<HelpScreen> {
           'FAQs',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => _launchUrl('+375256615859'),
+            icon: Icon(Icons.phone),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -75,6 +82,13 @@ class _HelpScreenState extends State<HelpScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _launchUrl(String phoneNum) async {
+    Uri _url = Uri.parse('tel:${phoneNum}');
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 
 }
