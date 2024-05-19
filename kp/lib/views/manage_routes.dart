@@ -109,14 +109,36 @@ class _ManageRoutesState extends State<ManageRoutes> {
     String time = _timeController.text;
 
     if (departureID > 0 && destinationID > 0 && time.isNotEmpty) {
-      MinibusesRoute newRoute = MinibusesRoute(departureID, destinationID, time);
-      await routeHandler.insert(newRoute);
-      setState(() {
-        _routesFuture = _getAllRoutes();
-        _departureController.clear();
-        _destinationController.clear();
-        _timeController.clear();
-      });
+      bool routeExists = await routeHandler.checkIfRouteExists(departureID, destinationID, time);
+      if (!routeExists) {
+        MinibusesRoute newRoute = MinibusesRoute(departureID, destinationID, time);
+        await routeHandler.insert(newRoute);
+        setState(() {
+          _routesFuture = _getAllRoutes();
+          _departureController.clear();
+          _destinationController.clear();
+          _timeController.clear();
+        });
+      } else {
+        // Отобразить сообщение об ошибке или выполнить другие действия, если маршрут уже существует
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('Route already exists!'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 

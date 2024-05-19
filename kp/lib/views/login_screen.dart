@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amberAccent,
-        title: Text('Login'),
+        title: Text('Страница для входа в аккаунт'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
             TextFormField(
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'Password',
+                labelText: 'Пароль',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 _login(context);
               },
-              child: Text('Login'),
+              child: Text('Войти'),
             ),
           ],
         ),
@@ -99,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Error'),
-          content: Text('Invalid username or password.'),
+          title: Text('Ошибка'),
+          content: Text('Неправильный username или пароль.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

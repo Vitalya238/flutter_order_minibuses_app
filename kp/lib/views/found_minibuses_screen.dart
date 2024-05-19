@@ -44,6 +44,7 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Consumer<AuthNotifier>(
       builder: (context, authNotifier, child) {
@@ -64,50 +65,85 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     final data = snapshot.data![index];
-                    return ListTile(
-                      title: Text('Рейс №${data['TRIPID']}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Card(
+                        color: Color.fromRGBO(255, 227, 135, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          side: BorderSide(color: Colors.grey, width: 1),
+                        ),
+                        elevation: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${data['DEPARTURE_TIME']}'),
-                              Text('${data['DESTINATION_TIME']}'),
+                              Text(
+                                'Рейс №${data['TRIPID']}',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data['DEPARTURE_TIME']}',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                  Text(
+                                    '${data['DESTINATION_TIME']}',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              ),
+                              SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  Text('${data['DEPARTURE_DATE']}'),
+                                  Text('${data['DESTINATION_DATE']}'),
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              ),
+                              SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data['DepartureCityName']}',
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    '${data['DestinationCityName']}',
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              ),
+                              SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Свободные места: ${data['COUNT_FREE_PLACES']}',
+                                    style: TextStyle(color: Color.fromRGBO(100, 150, 100, 1), fontWeight: FontWeight.w500),
+                                  ),
+                                  Text('Стоимость: ${data['COST']} USD'),
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              ),
+                              SizedBox(height: 16.0),
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (authNotifier.currentUser.roleId == 2) {
+                                    _confirmOrder(context, data['TRIPID'], authNotifier.currentUser);
+                                  }
+                                },
+                                child: Center(
+                                  child: Text('Buy'),
+                                ),
+                              ),
                             ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           ),
-                          Row(
-                            children: [
-                              Text('${data['DEPARTURE_DATE']}'),
-                              Text('${data['DESTINATION_DATE']}'),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          ),
-                          Row(
-                            children: [
-                              Text('${data['DepartureCityName']}'),
-                              Text('${data['DestinationCityName']}'),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          ),
-                          Row(
-                            children: [
-                              Text('Свободные места: ${data['COUNT_FREE_PLACES']}'),
-                              Text('Стоимость: ${data['COST']} USD'),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (authNotifier.currentUser.roleId == 2) {
-                                _confirmOrder(context, data['TRIPID'], authNotifier.currentUser);
-                              }
-                            },
-                            child: Center(
-                              child: Text('Buy'),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     );
                   },
@@ -119,7 +155,6 @@ class _FoundMinibusesScreenState extends State<FoundMinibusesScreen> {
       },
     );
   }
-
   void _confirmOrder(BuildContext context, int tripId, Client currentUser) {
     showDialog(
       context: context,

@@ -1,5 +1,3 @@
-
-
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -72,58 +70,60 @@ class _BecomeADriverFormState extends State<BecomeADriverForm> {
   Widget build(BuildContext context) {
     return Consumer<AuthNotifier>(
         builder: (context, authNotifier, child)
-    {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.amberAccent,
-          title: const Text(
-            'Стать водителем',
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      labelText: 'Опыт вождения (в годах)'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Пожалуйста, введите ваш опыт вождения';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _experience = int.parse(value!);
-                  },
-                ),
-                SizedBox(height: 16),
-                _licensePhoto.isEmpty
-                    ? ElevatedButton(
-                  onPressed: _getImage,
-                  child: Text('Добавить фото водительского удостоверения'),
-                )
-                    : Image.memory(_licensePhoto),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      _addApplication();
-                    }
-                  },
-                  child: Text('Отправить заявление'),
-                ),
-              ],
+        {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.amberAccent,
+              title: const Text(
+                'Стать водителем',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
             ),
-          ),
-        ),
-      );
-    });
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            labelText: 'Опыт вождения (в годах)'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Пожалуйста, введите ваш опыт вождения';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _experience = int.parse(value!);
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      _licensePhoto.isEmpty
+                          ? ElevatedButton(
+                        onPressed: _getImage,
+                        child: Text('Добавить фото водительского удостоверения'),
+                      )
+                          : Image.memory(_licensePhoto),
+                      SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            _addApplication();
+                          }
+                        },
+                        child: Text('Отправить заявление'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

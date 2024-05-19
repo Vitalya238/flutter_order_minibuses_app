@@ -68,22 +68,25 @@ class _DriverTripsScreenState extends State<DriverTripsScreen> {
                     int tripId = groupedOrders.keys.elementAt(index);
                     List<Map<String, dynamic>> orders = groupedOrders[tripId]!;
 
-                    return ListTile(
-                      title: Text('Рейс №$tripId'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: orders.map((order) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Имя пассажира: ${order['PassengerLastName']}'),
-                              ElevatedButton(
-                                onPressed: () => _launchUrl('${order['PassengerPhoneNum']}'),
-                                child: Text('Позвонить: ${order['PassengerPhoneNum']}'),
-                              ),
-                            ],
-                          );
-                        }).toList(),
+                    return Card(
+                      color: Color.fromRGBO(255, 227, 135, 1),
+                      child: ListTile(
+                        title: Text('Рейс №$tripId'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: orders.map((order) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Имя пассажира: ${order['PassengerLastName']}'),
+                                ElevatedButton(
+                                  onPressed: () => _launchUrl('${order['PassengerPhoneNum']}'),
+                                  child: Text('Позвонить: ${order['PassengerPhoneNum']}'),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
                       ),
                     );
                   },

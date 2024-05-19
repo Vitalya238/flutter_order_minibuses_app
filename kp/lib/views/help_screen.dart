@@ -70,11 +70,14 @@ class _HelpScreenState extends State<HelpScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final data = snapshot.data![index];
-                return ExpansionTile(
-                  title: Text('question: ${data.question}'),
-                  children: [
-                    Text('answer: ${data.answer}'),
-                  ],
+                return Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child:ExpansionTile(
+                      title: Text('Вопрос: ${data.question}', style: TextStyle(fontSize:24 , fontWeight: FontWeight.w400), ),
+                      children: [
+                        Text('Ответ: ${data.answer}', style: TextStyle(fontSize:20 ),),
+                      ],
+                    ),
                 );
               },
             );

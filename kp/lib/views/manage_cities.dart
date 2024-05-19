@@ -87,12 +87,23 @@ class _ManageCitiesState extends State<ManageCities> {
     String cityName = _cityNameController.text;
 
     if (cityName.isNotEmpty) {
-      City newCity = City(cityName);
-      await cityHandler.insert(newCity);
-      setState(() {
-        _citiesFuture = _getAllCities();
-        _cityNameController.clear();
-      });
+      bool cityExists = await cityHandler.checkIfCityExists(cityName);
+
+      if (!cityExists) {
+        City newCity = City(cityName);
+        await cityHandler.insert(newCity);
+        setState(() {
+          _citiesFuture = _getAllCities();
+          _cityNameController.clear();
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('City already exists.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 

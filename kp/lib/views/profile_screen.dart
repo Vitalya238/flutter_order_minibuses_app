@@ -13,6 +13,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -42,11 +43,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return clientHandler.getAllClients();
   }
 
-  void _error() {
+  void _error(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Error'),
+        title: Text('Ошибка'),
+        content: Text(message),
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -67,172 +69,212 @@ class _ProfileScreenState extends State<ProfileScreen> {
           appBar: AppBar(
             backgroundColor: Colors.amberAccent,
             title: const Text(
-              'Profile',
+              'Профиль',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
-          body: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (authNotifier.isAuthenticated)
-                  Text(
-                    'Welcome, ${authNotifier.isAuthenticated ? authNotifier.currentUser!.username : ''}!',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                else
-                  Text(
-                    'Registration',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                SizedBox(height: 10),
-                if (!authNotifier.isAuthenticated)
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      labelText: 'Username',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                SizedBox(height: 10),
-                if (!authNotifier.isAuthenticated)
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                    ),
-                    obscureText: true,
-                  ),
-                SizedBox(height: 10),
-                if (!authNotifier.isAuthenticated)
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      border: OutlineInputBorder(),
-                    ),
-                    obscureText: true,
-                  ),
-                SizedBox(height: 10),
-                if (!authNotifier.isAuthenticated)
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                SizedBox(height: 10,),
-                if (!authNotifier.isAuthenticated)
-                  TextFormField(
-                    controller: _lastnameController,
-                    decoration: InputDecoration(
-                      labelText: 'Lastname',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                SizedBox(height: 10,),
-                if (!authNotifier.isAuthenticated)
-                  TextFormField(
-                    controller: _phoneNumberController,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                SizedBox(height: 20),
-                if (!authNotifier.isAuthenticated)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      if (!authNotifier.isAuthenticated)
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_usernameController.text.isEmpty ||
-                                _passwordController.text.isEmpty ||
-                                _confirmPasswordController.text.isEmpty ||
-                                _emailController.text.isEmpty ||
-                                _lastnameController.text.isEmpty ||
-                                _phoneNumberController.text.isEmpty) {
-                              _error();
-                              return;
-                            }
-                            if (_passwordController.text != _confirmPasswordController.text) {
-                              _error();
-                              return;
-                            }
-                            _signUp(context);
-                          },
-                          child: Text('Submit'),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (authNotifier.isAuthenticated)
+                      Text(
+                        'Приветствуем, ${authNotifier.isAuthenticated ? authNotifier.currentUser!.username : ''}!',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                      if (!authNotifier.isAuthenticated)
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => LoginScreen()),
-                            );
-                          },
-                          child: const Text('Already have an account?'),
+                      )
+                    else
+                      Text(
+                        'Регистрация',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                    ],
-                  ),
-                if (authNotifier.currentUser.roleId == 2)
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BecomeADriverForm()),
-                      );
-                    },
-                    child: Text('Стать водителем'),
-                  ),
-                if (authNotifier.isAuthenticated)
-                  ElevatedButton(
-                    onPressed: () {
-                      authNotifier.logout();
-                    },
-                    child: Text('Logout'),
-                  ),
-                SizedBox(height: 10),
-                Expanded(
-                  child: Visibility(
-                    visible: authNotifier.currentUser.roleId == 1,
-                    child: FutureBuilder<List<Client>>(
-                      future: _clientsFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          List<Client>? clients = snapshot.data;
-                          return ListView.builder(
-                            itemCount: clients!.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(
-                                    'ID: ${clients[index].userId}, Name: ${clients[index].username}, Phone: ${clients[index].telephone}, Email: ${clients[index].userEmail}'),
-                                subtitle: Text(
-                                    'Password: ${clients[index].userPassword}, LastName: ${clients[index].userLastname}, Role: ${clients[index].roleId}'),
-                              );
-                            },
+                      ),
+                    SizedBox(height: 10),
+                    if (!authNotifier.isAuthenticated)
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Пожалуйста введите ваш username';
+                          }
+                          return null;
+                        },
+                      ),
+                    SizedBox(height: 10),
+                    if (!authNotifier.isAuthenticated)
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          labelText: 'Пароль',
+                          border: OutlineInputBorder(),
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Пожалуйста введите ваш пароль';
+                          }
+                          return null;
+                        },
+                      ),
+                    SizedBox(height: 10),
+                    if (!authNotifier.isAuthenticated)
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        decoration: InputDecoration(
+                          labelText: 'Подтвердить пароль',
+                          border: OutlineInputBorder(),
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Пожалуйста введите ваш пароль';
+                          }
+                          if (value != _passwordController.text) {
+                            return 'Пароли не совпадают';
+                          }
+                          return null;
+                        },
+                      ),
+                    SizedBox(height: 10),
+                    if (!authNotifier.isAuthenticated)
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Пожалуйста введите ваш email';
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                            return 'Пожалуйста введите ваш пароль валидный email';
+                          }
+                          return null;
+                        },
+                      ),
+                    SizedBox(height: 10),
+                    if (!authNotifier.isAuthenticated)
+                      TextFormField(
+                        controller: _lastnameController,
+                        decoration: InputDecoration(
+                          labelText: 'Фамилия',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Пожалуйста введите вашу фамилию';
+                          }
+                          return null;
+                        },
+                      ),
+                    SizedBox(height: 10),
+                    if (!authNotifier.isAuthenticated)
+                      TextFormField(
+                        controller: _phoneNumberController,
+                        decoration: InputDecoration(
+                          labelText: 'Номер телефона',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Пожалуйста введите ваш номер телефона';
+                          }
+                          if (!RegExp(r'^\+375[0-9]{9}$').hasMatch(value)) {
+                            return 'Пример валидного номера +375256615859';
+                          }
+                          return null;
+                        },
+                      ),
+                    SizedBox(height: 20),
+                    if (!authNotifier.isAuthenticated)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          if (!authNotifier.isAuthenticated)
+                            ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _signUp(context);
+                                }
+                              },
+                              child: Text('Зарегистрироваться'),
+                            ),
+                          if (!authNotifier.isAuthenticated)
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                                );
+                              },
+                              child: const Text('Войти'),
+                            ),
+                        ],
+                      ),
+                    if (authNotifier.currentUser.roleId == 2)
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BecomeADriverForm()),
                           );
-                        }
-                      },
+                        },
+                        child: Text('Стать водителем'),
+                      ),
+                    if (authNotifier.isAuthenticated)
+                      ElevatedButton(
+                        onPressed: () {
+                          authNotifier.logout();
+                        },
+                        child: Text('Выйти из аккаунта'),
+                      ),
+                    SizedBox(height: 10),
+                    Visibility(
+                      visible: authNotifier.currentUser.roleId == 1,
+                      child: FutureBuilder<List<Client>>(
+                        future: _clientsFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            List<Client>? clients = snapshot.data;
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: clients!.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text(
+                                      'ID: ${clients[index].userId}, Name: ${clients[index].username}, Phone: ${clients[index].telephone}, Email: ${clients[index].userEmail}'
+                                  ),
+                                  subtitle: Text(
+                                      'Password: ${clients[index].userPassword}, LastName: ${clients[index].userLastname}, Role: ${clients[index].roleId}'
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-
-              ],
+              ),
             ),
           ),
         );
@@ -244,23 +286,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     ClientHandler clientHandler = ClientHandler(dbHelper.db);
 
-
     bool usernameExists = await checkUsernameExists(_usernameController.text);
     if (usernameExists) {
-      _showErrorDialog('Username already exists');
+      _error('Username already exists');
       return;
     }
 
     bool phoneNumberExists = await checkPhoneNumberExists(_phoneNumberController.text);
     if (phoneNumberExists) {
-      _showErrorDialog('Phone number already exists');
+      _error('Phone number already exists');
       return;
     }
     bool emailExist = await checkEmailExists(_emailController.text);
     if (emailExist) {
-      _showErrorDialog('Email already exists');
+      _error('Email already exists');      return;
+    }
+    if (_passwordController.text != _confirmPasswordController.text) {
+      _error('Passwords do not match');
       return;
     }
+
     Client newClient = Client(
       _emailController.text,
       _passwordController.text,
@@ -283,40 +328,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _clientsFuture = _getAllClients();
     });
   }
+
   Future<bool> checkPhoneNumberExists(String phoneNumber) async {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     ClientHandler clientHandler = ClientHandler(dbHelper.db);
     final allClients = await clientHandler.getAllClients();
     return allClients.any((client) => client.telephone == phoneNumber);
   }
+
   Future<bool> checkUsernameExists(String username) async {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     ClientHandler clientHandler = ClientHandler(dbHelper.db);
     final allClients = await clientHandler.getAllClients();
     return allClients.any((client) => client.username == username);
   }
+
   Future<bool> checkEmailExists(String userEmail) async {
     final dbHelper = Provider.of<DatabaseNotifier>(context, listen: false).databaseHelper;
     ClientHandler clientHandler = ClientHandler(dbHelper.db);
     final allClients = await clientHandler.getAllClients();
     return allClients.any((client) => client.userEmail == userEmail);
   }
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Error'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
 }

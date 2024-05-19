@@ -52,19 +52,19 @@ class _BottomNavBarForClientsState extends State<BottomNavBarForClients> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Find',
+            label: 'Найти',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.help),
-            label: 'Help',
+            label: 'Помощь',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bus_alert_rounded),
-            label: 'Trips',
+            label: 'Мои Поездки',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Профиль',
           ),
         ],
       ),
@@ -119,16 +119,16 @@ class _BottomNavBarForDispatchersState extends State<BottomNavBarForDispatchers>
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Find',
+            icon: Icon(Icons.settings_applications),
+            label: 'Applications',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.help),
-            label: 'Help',
+            label: 'FAQ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bus_alert_rounded),
-            label: 'Trips',
+            icon: Icon(Icons.data_array),
+            label: 'DB',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -166,12 +166,12 @@ class _BottomNavBarForGuestsState extends State<BottomNavBarForGuests> {
         appBar: AppBar(
           backgroundColor: Colors.amberAccent,
           title: const Text(
-            'Trips',
+            'Поездки',
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
         body: const Center(
-          child: Text('Authorized users only'),
+          child: Text('Доступно только авторизованным пользователям'),
         ),
       ),
     ),
@@ -199,19 +199,19 @@ class _BottomNavBarForGuestsState extends State<BottomNavBarForGuests> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Find',
+            label: 'Найти',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.help),
-            label: 'Help',
+            label: 'Помощь',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bus_alert_rounded),
-            label: 'Trips',
+            label: 'Мои поездки',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Профиль',
           ),
         ],
       ),
@@ -270,19 +270,19 @@ class _BottomNavBarForDriversState extends State<BottomNavBarForDrivers> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Find',
+            label: 'Найти',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.help),
-            label: 'Help',
+            label: 'Помощь',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bus_alert_rounded),
-            label: 'Trips',
+            label: 'Мои поездки',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Профиль',
           ),
         ],
       ),

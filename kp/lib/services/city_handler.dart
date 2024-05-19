@@ -47,6 +47,15 @@ class CityHandler{
     }
     return cities;
   }
+  Future<bool> checkIfCityExists(String cityName) async {
+    List<Map<String, dynamic>> result = await db.query(
+      tableName,
+      where: '$columnCityName = ?',
+      whereArgs: [cityName],
+    );
+    return result.isNotEmpty;
+  }
+
 
   Future close() async => db.close();
 }
