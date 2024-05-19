@@ -59,6 +59,7 @@ class TripHandler {
     return await db.update(tableName, trip.toMap(), where: '$columnTripId = ?', whereArgs: [trip.tripId]);
   }
 
+
   Future<List<Map<String, dynamic>>> getAllTripsWithCities(
       String date,
       int passengers,
@@ -81,6 +82,7 @@ class TripHandler {
     List<Map<String, dynamic>> results = await db.rawQuery(sqlQuery, [date, passengers, departureCityName, destinationCityName]);
     return results;
   }
+
 
 
   Future<List<Trip>> getAllTrips() async{

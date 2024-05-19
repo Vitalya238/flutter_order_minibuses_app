@@ -79,5 +79,33 @@ class OrderHandler {
     return results;
   }
 
+  Future<List<Map<String, dynamic>>> getAllTripsForDrivers(
+      int userId
+      ) async {
+    String sqlQuery = '''
+    SELECT $tableName.$columnOrderID, $tableName.$columnTripID, $tableName.$columnClientID, $tableName.$columnPassengersQuantity as PassengersQuantity, 
+      TRIP.TRIPID, TRIP.DEPARTURE_DATE as TripDepartureDate, TRIP.DESTINATION_DATE as TripDestinationDate, TRIP.DEPARTURE_TIME as TripDepartureTime, TRIP.DESTINATION_TIME as TripDestinationTime, TRIP.COST as TripCost, 
+      CITY_DEPARTURE.CITYNAME as DepartureCityName,
+      TRIPCLIENT.TELEPHONE as PassengerPhoneNum,
+      TRIPCLIENT.USERLASTNAME as PassengerLastName,
+      CITY_DESTINATION.CITYNAME as DestinationCityName,
+      DRIVER.TELEPHONE as DRIVER_TELEPHONE, DRIVER.USERLASTNAME as DRIVER_USERLASTNAME,
+      MINIBUS.BUSBRAND as BusBrand, MINIBUS.BUSNUMBER as BusNumber
+    FROM $tableName
+    INNER JOIN TRIP ON $tableName.$columnTripID = TRIP.TRIPID
+    INNER JOIN ROUTE ON ROUTE.ROUTEID = TRIP.ROUTEID
+    INNER JOIN CITY as CITY_DEPARTURE ON ROUTE.POINT_OF_DEPARTUREID = CITY_DEPARTURE.CITYID
+    INNER JOIN CITY as CITY_DESTINATION ON ROUTE.POINT_OF_DESTINATIONID = CITY_DESTINATION.CITYID
+    INNER JOIN CLIENT as DRIVER ON DRIVER.USERID = TRIP.DRIVERID
+    INNER JOIN CLIENT as TRIPCLIENT ON TRIPCLIENT.USERID = $tableName.$columnClientID
+    INNER JOIN BUS as MINIBUS ON MINIBUS.BUSID = TRIP.BUSID
+    WHERE DRIVER.USERID = ?
+  ''';
+
+    List<Map<String, dynamic>> results = await db.rawQuery(sqlQuery, [userId]);
+    return results;
+  }
+
+
   Future close() async => db.close();
 }

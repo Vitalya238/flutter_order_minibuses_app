@@ -23,10 +23,13 @@ class _MainScreenState extends State<MainScreen> {
                   .secondary,
               title: const Text('Заказ маршрутки'),
             ),
-            bottomNavigationBar: authNotifier.currentUser.roleId == 1
+            bottomNavigationBar:
+                  authNotifier.currentUser.roleId == 1
                 ? BottomNavBarForDispatchers()
                 : authNotifier.currentUser.roleId == 2
                 ? BottomNavBarForClients()
+                : authNotifier.currentUser.roleId == 3
+                ? BottomNavBarForDrivers()
                 : BottomNavBarForGuests(),
           );
         });
