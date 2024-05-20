@@ -303,87 +303,89 @@ class _ManageTripsState extends State<ManageTrips> {
   }
 
   Widget _buildEditTripForm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextField(
-          controller: _departureDateController,
-          decoration: InputDecoration(
-            labelText: 'Departure Date',
-            border: OutlineInputBorder(),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _departureDateController,
+            decoration: InputDecoration(
+              labelText: 'Departure Date',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _destinationDateController,
-          decoration: InputDecoration(
-            labelText: 'Destination Date',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _destinationDateController,
+            decoration: InputDecoration(
+              labelText: 'Destination Date',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _departureTimeController,
-          decoration: InputDecoration(
-            labelText: 'Departure Time',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _departureTimeController,
+            decoration: InputDecoration(
+              labelText: 'Departure Time',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _destinationTimeController,
-          decoration: InputDecoration(
-            labelText: 'Destination Time',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _destinationTimeController,
+            decoration: InputDecoration(
+              labelText: 'Destination Time',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _countFreePlacesController,
-          decoration: InputDecoration(
-            labelText: 'Number of Free Places',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _countFreePlacesController,
+            decoration: InputDecoration(
+              labelText: 'Number of Free Places',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
           ),
-          keyboardType: TextInputType.number,
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _costController,
-          decoration: InputDecoration(
-            labelText: 'Cost',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _costController,
+            decoration: InputDecoration(
+              labelText: 'Cost',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
           ),
-          keyboardType: TextInputType.number,
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _routeIdController,
-          decoration: InputDecoration(
-            labelText: 'Route ID',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _routeIdController,
+            decoration: InputDecoration(
+              labelText: 'Route ID',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
           ),
-          keyboardType: TextInputType.number,
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _busIdController,
-          decoration: InputDecoration(
-            labelText: 'Bus ID',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _busIdController,
+            decoration: InputDecoration(
+              labelText: 'Bus ID',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
           ),
-          keyboardType: TextInputType.number,
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _driverIdController,
-          decoration: InputDecoration(
-            labelText: 'Driver ID',
-            border: OutlineInputBorder(),
+          SizedBox(height: 10),
+          TextField(
+            controller: _driverIdController,
+            decoration: InputDecoration(
+              labelText: 'Driver ID',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
           ),
-          keyboardType: TextInputType.number,
-        ),
-      ],
+        ],
+      ),
     );
   }
 

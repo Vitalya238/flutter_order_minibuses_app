@@ -83,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     if (authNotifier.isAuthenticated)
                       Text(
-                        'Приветствуем, ${authNotifier.isAuthenticated ? authNotifier.currentUser!.username : ''}!',
+                        'Приветствуем, ${authNotifier.isAuthenticated ? authNotifier.currentUser!.userLastname  : ''}!',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
