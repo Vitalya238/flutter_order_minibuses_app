@@ -160,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             return 'Пожалуйста введите ваш email';
                           }
                           if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                            return 'Пожалуйста введите ваш пароль валидный email';
+                            return 'Пожалуйста введите валидный email';
                           }
                           return null;
                         },

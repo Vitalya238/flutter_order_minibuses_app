@@ -75,16 +75,24 @@ class _DriverTripsScreenState extends State<DriverTripsScreen> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: orders.map((order) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Имя пассажира: ${order['PassengerLastName']}'),
-                                ElevatedButton(
-                                  onPressed: () => _launchUrl('${order['PassengerPhoneNum']}'),
-                                  child: Text('Позвонить: ${order['PassengerPhoneNum']}'),
-                                ),
-                              ],
+                            return Card(
+                              color: Color.fromRGBO(255, 227, 150, 1),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text('Имя пассажира: ${order['PassengerLastName']}', style: TextStyle(fontSize: 12),),
+                                    trailing: ElevatedButton(
+                                      onPressed: () => _launchUrl('${order['PassengerPhoneNum']}'),
+                                      child: Text('Позвонить: ${order['PassengerPhoneNum']}', style: TextStyle(fontSize: 12),),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text('Пассажиров: ${order['PassengersQuantity']}'),
+                                  ),
+                                ],
+                              ),
                             );
+
                           }).toList(),
                         ),
                       ),
